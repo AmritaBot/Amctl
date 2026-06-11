@@ -11,9 +11,14 @@ with the Amrita ecosystem.
 ## Installation
 
 ```bash
+# From PyPI
 uv tool install amctl
-# or
-pip install amctl
+
+# By uv
+uv tool install amctl
+
+# From GitHub
+uv tool install git+https://github.com/AmritaBot/Amctl.git
 ```
 
 ## Quick Start
