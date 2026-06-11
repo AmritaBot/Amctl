@@ -9,7 +9,6 @@ tmpl      – Template‑specific sub‑commands.
 man       – Run project scripts from ``[tools.amctl.scripts]``.
 fix       – Restore missing / corrupted project files.
 self      – Manage amctl itself (cache, template updates).
-moo       – Easter egg (hidden from ``--help``).
 """
 
 from __future__ import annotations
@@ -170,8 +169,9 @@ def _choose_version(
     label = source_labels.get(result.source, "")
 
     latest = ver_list[0] if ver_list else ""
-    pre_count = sum(1 for v in ver_list
-                    if "rc" in v or "dev" in v or "alpha" in v or "beta" in v)
+    pre_count = sum(
+        1 for v in ver_list if "rc" in v or "dev" in v or "alpha" in v or "beta" in v
+    )
     total = len(ver_list)
     py_map = dict(versions)
 
@@ -282,12 +282,8 @@ def _resolve_python_version(
         + (f" ({len(ver_list)} versions)" if ver_list else " (no versions)")
     )
     if py_req:
-        ColorLog.error(
-            f"  '{version}' requires Python {py_req} (conflict)"
-        )
-    ColorLog.info(
-        "Use --frozen to skip Python version selection and let uv handle it."
-    )
+        ColorLog.error(f"  '{version}' requires Python {py_req} (conflict)")
+    ColorLog.info("Use --frozen to skip Python version selection and let uv handle it.")
     raise click.Abort()
 
 
@@ -750,7 +746,7 @@ class ManGroup(click.Group):
         if meta is None:
             ColorLog.error(
                 "Not inside an amctl project "
-                "(no [tools.amctl.project] found in pyproject.toml)."
+                "(no [tools.amctl.project] found in pyproject.toml or pyproject.toml is missing)."
             )
             ctx.exit(1)
         return super().invoke(ctx)
@@ -813,7 +809,9 @@ def fix_cmd(check: bool, force: bool, exclude: str | None) -> None:
     """
     meta = read_project_meta()
     if meta is None:
-        ColorLog.error("Not inside an amctl project.")
+        ColorLog.error(
+            "Not inside an amctl project. (no [tools.amctl.project] found in pyproject.toml or pyproject.toml is missing)"
+        )
         raise click.Abort()
 
     project_type = meta.get("project-type", "")
@@ -1113,20 +1111,7 @@ def tmpl_upd() -> None:
         click.echo("No amctl-template-* packages found in the environment.")
 
 
-#  moo  (easter egg — hidden from help)
-
-
-@cli.command("moo", hidden=True)
-def moo() -> None:
-    """Easter egg."""
-    click.echo(
-        r"""
-         (__)
-         (oo)
-   /------\/
-  / |    ||
- *  /\---/\
-    ~~   ~~
-.....Project Amrita.....
-"""
-    )
+@cli.command("hello", hidden=True)
+@click.option("-v", is_flag=True, hidden=True)
+def _amrita(v: bool) -> None:
+    click.echo("Hello!" if not v else "Hello, world!")

@@ -279,7 +279,9 @@ def resolve_versions(template_cls: type[BaseTemplate]) -> VersionResult:
                     updated_at = datetime.fromisoformat(updated_raw)
                     if now - updated_at < CACHE_TTL:
                         return VersionResult(
-                            versions=[(str(k), str(v)) for k, v in cached_versions.items()],
+                            versions=[
+                                (str(k), str(v)) for k, v in cached_versions.items()
+                            ],
                             source="cache",
                             updated_at=updated_raw,
                             outdated=False,
