@@ -1,6 +1,7 @@
 import enum
 import os
 
+import click
 from colorama import Fore, Style
 
 
@@ -49,25 +50,30 @@ class LogLevel(enum.IntEnum):
             return aliases[key]
         return LogLevel[key]
 
+
 @staticmethod
 def filter(level: LogLevel):
-        """Decorator that suppresses output when *level* is below threshold.
+    """Decorator that suppresses output when *level* is below threshold.
 
-        Usage::
+    Usage::
 
-            @filter(LogLevel.DEBUG)
-            @staticmethod
-            def debug(message: str): ...
+        @filter(LogLevel.DEBUG)
+        @staticmethod
+        def debug(message: str): ...
 
-        Args:
-            level: The ``LogLevel`` this output method corresponds to.
-        """
-        def decorator(func):
-            def wrapper(message: str):
-                if ColorLog.should_log(level):
-                    func(message)
-            return wrapper
-        return decorator
+    Args:
+        level: The ``LogLevel`` this output method corresponds to.
+    """
+
+    def decorator(func):
+        def wrapper(message: str):
+            if ColorLog.should_log(level):
+                func(message)
+
+        return wrapper
+
+    return decorator
+
 
 class ColorLog:
     """Utility class for printing colored log messages to the console.
@@ -134,8 +140,6 @@ class ColorLog:
         """Return ``True`` if *level* meets the current threshold."""
         return level >= ColorLog._level
 
-
-
     @staticmethod
     @filter(LogLevel.WARNING)
     def warn(message: str):
@@ -147,7 +151,7 @@ class ColorLog:
         Returns:
             The colorized warning message string.
         """
-        print(f"{Fore.YELLOW}[!]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.YELLOW}[!]{Style.RESET_ALL} {message}")
 
     @staticmethod
     @filter(LogLevel.INFO)
@@ -160,7 +164,7 @@ class ColorLog:
         Returns:
             The colorized info message string.
         """
-        print(f"{Fore.GREEN}[+]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.GREEN}[+]{Style.RESET_ALL} {message}")
 
     @staticmethod
     @filter(LogLevel.ERROR)
@@ -173,7 +177,7 @@ class ColorLog:
         Returns:
             The colorized error message string.
         """
-        print(f"{Fore.RED}[-]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.RED}[-]{Style.RESET_ALL} {message}")
 
     @staticmethod
     @filter(LogLevel.INFO)
@@ -186,7 +190,7 @@ class ColorLog:
         Returns:
             The colorized question message string.
         """
-        print(f"{Fore.BLUE}[?]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.BLUE}[?]{Style.RESET_ALL} {message}")
 
     @staticmethod
     @filter(LogLevel.SUCCESS)
@@ -199,7 +203,7 @@ class ColorLog:
         Returns:
             The colorized success message string.
         """
-        print(f"{Fore.GREEN}[=]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.GREEN}[=]{Style.RESET_ALL} {message}")
 
     @staticmethod
     @filter(LogLevel.DEBUG)
@@ -212,4 +216,4 @@ class ColorLog:
         Returns:
             The colorized debug message string.
         """
-        print(f"{Fore.CYAN}[*]{Style.RESET_ALL} {message}")
+        click.echo(f"{Fore.CYAN}[*]{Style.RESET_ALL} {message}")

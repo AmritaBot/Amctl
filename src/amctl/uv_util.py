@@ -114,6 +114,7 @@ class UvOperator:
             for k, v in kwargs.items()
         ]
         return self._run("lock", *flags)
+
     def export(self, **kwargs: str) -> str:
         """Run ``uv export [--<key>=<value> ...]``.
 
@@ -149,6 +150,7 @@ class UvOperator:
     def python(self, *args: str) -> str:
         """Run ``uv python <args>...``."""
         return self._run("python", *args)
+
     def venv(self, *args: str) -> str:
         """Run ``uv venv <args>...``."""
         return self._run("venv", *args)

@@ -8,16 +8,16 @@ __template_ignore___: Literal[False] = False
 class AmcoreTemplate(BaseTemplate):
     """Minimal Python package scaffold template."""
 
-    __template_name__: str = "amrita_core"
+    __template_name__: str = "amrita_sense"
     __template_description__: str = (
-        "Create a amrita_core project. "
-        + "See documentation at https://core.amritabot.com"
+        "Create a amrita_sense project. "
+        + "See documentation at https://sense.amritabot.com"
     )
-    __core_package__: str = "amrita_core"
-    __versions__: tuple[str, ...] = ("0.9.1",)
+    __core_package__: str = "amrita_sense"
+    __versions__: tuple[str, ...] = ("0.3.1",)
     __tmpl_fields__: ClassVar[dict[str, TmplField]] = {
         "description": field(
-            default="A Python package",
+            default="My awesome project.",
             description="Short project description",
         ),
     }

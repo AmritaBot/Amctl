@@ -1,0 +1,17 @@
+"""{{ name }} — {{ description }}"""
+import asyncio
+
+from amrita_sense import Node, WorkflowInterpreter, NOP
+
+@Node()
+def my_node():
+    print("Hello, World!")
+
+compose = my_node >> NOP
+my_fst_workflow = compose.render()
+
+async def main():
+    await WorkflowInterpreter(my_fst_workflow).run()
+
+if __name__ == "__main__":
+    asyncio.run(main())
