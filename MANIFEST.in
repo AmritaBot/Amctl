@@ -1,0 +1,13 @@
+# For sdist — ensures non-code files reach PyPI
+
+include LICENSE
+include README.md
+include CODE_OF_CONDUCT.md
+
+# Template files (already covered by package-data for wheels,
+# but MANIFEST.in is needed for sdist)
+recursive-include src/amctl/templ *.tmpl
+recursive-include src/amctl/templ *.py
+
+prune src/amctl/templ/**/__pycache__
+prune src/amctl/templ/**/*.pyc
