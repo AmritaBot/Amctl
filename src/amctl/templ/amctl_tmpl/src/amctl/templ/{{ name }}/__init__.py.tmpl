@@ -1,3 +1,4 @@
+"""{{ name }} — {{ description }}"""
 from typing import ClassVar, Literal
 
 from amctl.templating import BaseTemplate, TmplField, field
@@ -5,19 +6,16 @@ from amctl.templating import BaseTemplate, TmplField, field
 __template_ignore___: Literal[False] = False
 
 
-class AmsenseTemplate(BaseTemplate):
+class {{ name }}Template(BaseTemplate):
     """Minimal Python package scaffold template."""
 
-    __template_name__: str = "amrita_sense"
-    __template_description__: str = (
-        "Create a amrita_sense project. "
-        + "See documentation at https://sense.amritabot.com"
-    )
-    __core_package__: str = "amrita_sense"
-    __versions__: tuple[str, ...] = ("0.3.1",)
+    __template_name__: str = "{{ name }}"
+    __template_description__: str = ("{{ description }}")
+    __core_package__: str = "REPLACE_ME"
+    __versions__: tuple[str, ...] = ("REPLACE_ME",)
     __tmpl_fields__: ClassVar[dict[str, TmplField]] = {
         "description": field(
-            default="My awesome project.",
+            default="A Python package",
             description="Short project description",
         ),
     }
@@ -27,4 +25,4 @@ class AmsenseTemplate(BaseTemplate):
         super().on_create(project_dir, name, version=version, **fields)
 
 
-__template_export__ = AmsenseTemplate
+__template_export__ = {{ name }}Template

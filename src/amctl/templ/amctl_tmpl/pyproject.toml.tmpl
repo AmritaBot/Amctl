@@ -1,0 +1,43 @@
+[project]
+name = "amctl-template-{{ name }}"
+version = "0.1.0"
+description = "{{ description }}"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["amctl>=0.1.0"]
+
+[project.scripts]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["{{ name }}", "{{ name }}.*"]
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.12.8",
+    "pyright>=1.1.407",
+]
+package = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "F",     # Pyflakes
+    "W",     # pycodestyle warnings
+    "E",     # pycodestyle errors
+    "UP",    # pyupgrade
+    "C4",    # flake8-comprehensions
+    "I",     # isort
+]
+
+[tools.amctl.project]
+project-type = "{{ project_type }}"
+version = "{{ version }}"
+created_at = "{{ created_at }}"
+
+[tools.amctl.scripts]
+lint = "uv run ruff check ."
+sync = "uv sync"
