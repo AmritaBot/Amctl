@@ -9,9 +9,7 @@ class AmctlTemplate(BaseTemplate):
     """Minimal Python package scaffold template."""
 
     __template_name__: str = "amctl_template"
-    __template_description__: str = (
-        "Create a template for Amctl"
-    )
+    __template_description__: str = "Create a template for Amctl"
     __core_package__: str = "amctl"
     __versions__: tuple[str, ...] = ("0.1.0",)
     __tmpl_fields__: ClassVar[dict[str, TmplField]] = {

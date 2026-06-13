@@ -6,7 +6,7 @@ create    – Scaffold a new project from a template.
 list      – List available templates.
 info      – Show detailed information about a template.
 tmpl      – Template‑specific sub‑commands.
-man       – Run project scripts from ``[tools.amctl.scripts]``.
+man       – Run project scripts from ``[tool.amctl.scripts]``.
 fix       – Restore missing / corrupted project files.
 self      – Manage amctl itself (cache, template updates).
 """
@@ -702,7 +702,7 @@ def tmpl() -> None:
 class ManGroup(click.Group):
     """Dynamic group for ``amctl man <script> [-- extra_args]``.
 
-    Reads ``[tools.amctl.scripts]`` from the nearest ``pyproject.toml``
+    Reads ``[tool.amctl.scripts]`` from the nearest ``pyproject.toml``
     and exposes each key as a sub‑command.
     """
 
@@ -746,7 +746,7 @@ class ManGroup(click.Group):
         if meta is None:
             ColorLog.error(
                 "Not inside an amctl project "
-                "(no [tools.amctl.project] found in pyproject.toml or pyproject.toml is missing)."
+                "(no [tool.amctl.project] found in pyproject.toml or pyproject.toml is missing)."
             )
             ctx.exit(1)
         return super().invoke(ctx)
@@ -754,7 +754,7 @@ class ManGroup(click.Group):
 
 @cli.command(cls=ManGroup)
 def man() -> None:
-    """Run project scripts defined in [tools.amctl.scripts]."""
+    """Run project scripts defined in [tool.amctl.scripts]."""
     pass
 
 
@@ -810,7 +810,7 @@ def fix_cmd(check: bool, force: bool, exclude: str | None) -> None:
     meta = read_project_meta()
     if meta is None:
         ColorLog.error(
-            "Not inside an amctl project. (no [tools.amctl.project] found in pyproject.toml or pyproject.toml is missing)"
+            "Not inside an amctl project. (no [tool.amctl.project] found in pyproject.toml or pyproject.toml is missing)"
         )
         raise click.Abort()
 

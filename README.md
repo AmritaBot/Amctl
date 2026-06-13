@@ -133,11 +133,11 @@ amctl fix --exclude '["README.md",".gitignore"]'   # skip specific files
 ### `amctl man`
 
 Run project scripts defined in `pyproject.toml` under
-`[tools.amctl.scripts]`.
+`[tool.amctl.scripts]`.
 
 ```toml
 # pyproject.toml
-[tools.amctl.scripts]
+[tool.amctl.scripts]
 lint = "uv run ruff check ."
 test = "uv run pytest -v"
 start = "uv run uvicorn myapp.main:app --reload"

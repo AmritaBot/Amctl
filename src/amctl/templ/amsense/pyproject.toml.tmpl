@@ -33,11 +33,11 @@ select = [
     "I",     # isort
 ]
 
-[tools.amctl.project]
+[tool.amctl.project]
 project-type = "{{ project_type }}"
 version = "{{ version }}"
 created_at = "{{ created_at }}"
 
-[tools.amctl.scripts]
+[tool.amctl.scripts]
 lint = "uv run ruff check ."
 sync = "uv sync"

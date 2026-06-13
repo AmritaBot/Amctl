@@ -1,5 +1,5 @@
 """Project metadata helpers — read-only TOML access for
-``[tools.amctl.project]`` and ``[tools.amctl.scripts]`` sections.
+``[tool.amctl.project]`` and ``[tool.amctl.scripts]`` sections.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ def _load_toml(path: Path) -> dict[str, Any]:
 def read_project_meta(
     start_dir: Path | None = None,
 ) -> dict[str, str] | None:
-    """Read ``[tools.amctl.project]`` from the nearest ``pyproject.toml``.
+    """Read ``[tool.amctl.project]`` from the nearest ``pyproject.toml``.
 
     Args:
         start_dir: Directory to start searching from (default: cwd).
@@ -50,7 +50,7 @@ def read_project_meta(
         return None
 
     data = _load_toml(pyproject)
-    tools = data.get("tools")
+    tools = data.get("tool")
     if not isinstance(tools, dict):
         return None
     amctl_section = tools.get("amctl")
@@ -65,7 +65,7 @@ def read_project_meta(
 def read_project_scripts(
     start_dir: Path | None = None,
 ) -> dict[str, str]:
-    """Read ``[tools.amctl.scripts]`` from the nearest ``pyproject.toml``.
+    """Read ``[tool.amctl.scripts]`` from the nearest ``pyproject.toml``.
 
     Args:
         start_dir: Directory to start searching from (default: cwd).
@@ -79,7 +79,7 @@ def read_project_scripts(
         return {}
 
     data = _load_toml(pyproject)
-    tools = data.get("tools")
+    tools = data.get("tool")
     if not isinstance(tools, dict):
         return {}
     amctl_section = tools.get("amctl")
