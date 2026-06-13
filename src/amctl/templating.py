@@ -333,3 +333,47 @@ class TemplateManager:
             )
 
         self._templ_class[tmpl_name] = templ
+
+
+def discover_templates() -> None:
+    """Import all template modules discoverable under the ``amctl.templ``
+    namespace package.
+
+    Because ``amctl.templ`` is a :pep:`420` namespace package (no
+    ``__init__.py``), its ``__path__`` automatically includes every
+    ``amctl/templ/`` directory found on :data:`sys.path`.  This function
+    iterates over all sub‑modules, validates them, and triggers
+    auto‑registration via :meth:`BaseTemplate.__init_subclass__`.
+
+    Called once from :func:`amctl.__main__.main` before the CLI starts.
+    """
+    import importlib
+    import pkgutil
+
+    import amctl.templ  # namespace package – triggers __path__ computation
+
+    for _loader, module_name, _is_pkg in pkgutil.iter_modules(amctl.templ.__path__):
+        module = importlib.import_module(f"amctl.templ.{module_name}")
+
+        # Respect __template_ignore__ – skip modules that opt out.
+        if getattr(module, "__template_ignore__", False):
+            continue
+
+        export = getattr(module, "__template_export__", None)
+        if export is None:
+            raise ValueError(
+                f"Module {module_name} does not have "
+                f"`__template_export__: BaseTemplate` attribute"
+            )
+        if not isinstance(export, type):
+            raise TypeError(
+                f"Module {module_name} has `__template_export__` "
+                f"attribute that is not a type"
+            )
+        if not issubclass(export, BaseTemplate):
+            raise TypeError(
+                f"Module {module_name} has `__template_export__` "
+                f"attribute that is not a subclass of BaseTemplate"
+            )
+        export.module = module
+        ColorLog.success(f"Loaded template {export.__template_name__}")

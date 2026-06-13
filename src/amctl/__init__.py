@@ -1,4 +1,3 @@
-from . import templ
 from .colors import ColorLog as ColorLog
 from .templating import BaseTemplate as BaseTemplate
 from .templating import TemplateManager as TemplateManager
@@ -13,5 +12,4 @@ __all__ = [
     "TmplField",
     "UvOperator",
     "field",
-    "templ",
 ]

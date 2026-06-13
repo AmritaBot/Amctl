@@ -2,7 +2,7 @@ from typing import ClassVar, Literal
 
 from amctl.templating import BaseTemplate, TmplField, field
 
-__template_ignore___: Literal[False] = False
+__template_ignore__: Literal[False] = False
 
 
 class AmcoreTemplate(BaseTemplate):
