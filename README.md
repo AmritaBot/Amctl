@@ -234,7 +234,10 @@ __template_export__ = MyTemplate
 ```
 
 Template files go in the same directory and use the `.tmpl` extension
-for Jinja2 rendering. Directory names containing `{{  }}` markers are
+for Jinja2 rendering.  Files ending with ``.pre`` (e.g.
+``.gitignore.pre``, ``.env.pre``) are copied **verbatim** (no Jinja2
+processing) with the ``.pre`` suffix stripped from the destination name.
+Directory names containing ``{{  }}`` markers are
 also rendered (e.g. `src/{{ name }}/__init__.py.tmpl`).
 
 ---

@@ -1,5 +1,9 @@
 import os
 import shlex
+import sys
+from typing import Any
+
+_IS_WINDOWS = sys.platform == "win32"
 
 _uv_check = os.popen("uv --version")
 _uv_check.read()
@@ -31,12 +35,13 @@ class UvOperator:
     def _build_cmd(self, *parts: str) -> str:
         """Build a single shell command string from positional *parts*.
 
-        Each part is shell-escaped and a ``cd`` prefix is prepended when
-        *cwd* was set.
+        Each part is shell-escaped and a ``cd`` (``cd /d`` on Windows)
+        prefix is prepended when *cwd* was set.
         """
         cmd = " ".join(shlex.quote(p) for p in parts)
         if self._cwd is not None:
-            cmd = f"cd {shlex.quote(self._cwd)} && {cmd}"
+            cd_flag = "/d " if _IS_WINDOWS else ""
+            cmd = f"cd {cd_flag}{shlex.quote(self._cwd)} && {cmd}"
         return cmd
 
     def _run(self, *parts: str) -> str:
@@ -47,7 +52,10 @@ class UvOperator:
                 in the message).
         """
         cmd = self._build_cmd(self._uv, *parts)
-        with os.popen(cmd) as stream:
+        # On Windows, CMD may use the system OEM code page (e.g. cp936)
+        # rather than UTF-8; pass errors="replace" as a safety net.
+        popen_kwargs: dict[str, Any] = {"errors": "replace"} if _IS_WINDOWS else {}
+        with os.popen(cmd, **popen_kwargs) as stream:
             output = stream.read()
         exit_code = stream.close()
         if exit_code is not None:

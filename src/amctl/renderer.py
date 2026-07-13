@@ -87,11 +87,14 @@ class TemplateRenderer:
         """Render a file or directory *name* through Jinja2 if it contains
         ``{{`` / ``{%`` markers.
         """
-        if "{{" in name or "{%" in name:
+        if name.endswith(".pre"):
+            name = name[:-4]
+        elif "{{" in name or "{%" in name:
             from jinja2 import BaseLoader, Environment
 
             tpl = Environment(loader=BaseLoader()).from_string(name)
-            return tpl.render(**context)
+            name = tpl.render(**context)
+
         return name
 
     def render_dir(
@@ -135,8 +138,10 @@ class TemplateRenderer:
                 src_file = root / fname
                 rendered_fname = self._render_name(fname, context)
                 dst_file = dst_root / rendered_fname
-
-                if fname.endswith(".tmpl"):
+                if fname.endswith(".pre"):
+                    shutil.copy2(src_file, dst_file)
+                    ColorLog.info(f"  Copied {dst_file}")
+                elif fname.endswith(".tmpl"):
                     self.render_file(src_file, dst_file, context)
                 else:
                     shutil.copy2(src_file, dst_file)
