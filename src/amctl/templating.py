@@ -8,6 +8,7 @@ attributes and hook methods.
 
 from __future__ import annotations
 
+import os
 from abc import ABC
 from collections.abc import Callable
 from datetime import datetime, timezone
@@ -376,4 +377,5 @@ def discover_templates() -> None:
                 f"attribute that is not a subclass of BaseTemplate"
             )
         export.module = module
-        ColorLog.success(f"Loaded template {export.__template_name__}")
+        if os.environ.get("AMCTL_DEBUG", "false").lower() == "true":
+            ColorLog.success(f"Loaded template {export.__template_name__}")

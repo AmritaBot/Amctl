@@ -201,6 +201,7 @@ fresh cache (24h TTL) → PyPI → expired cache (warn) → hardcoded fallback
 | `AMCTL_TMPL_USECACHE=false` | Disable local cache (still uses PyPI)        |
 | `AMCTL_TMPL_NOPYPI=true`    | Block all PyPI requests (air-gapped)         |
 | `AMCTL_LOG_LEVEL=debug`     | Enable debug logging for network diagnostics |
+| `AMCTL_DEBUG=true`          | Print each loaded template name at startup   |
 
 Each version carries a `requires_python` constraint obtained from PyPI.
 Amctl attempts to resolve a compatible Python interpreter using `uv
@@ -234,10 +235,10 @@ __template_export__ = MyTemplate
 ```
 
 Template files go in the same directory and use the `.tmpl` extension
-for Jinja2 rendering.  Files ending with ``.pre`` (e.g.
-``.gitignore.pre``, ``.env.pre``) are copied **verbatim** (no Jinja2
-processing) with the ``.pre`` suffix stripped from the destination name.
-Directory names containing ``{{  }}`` markers are
+for Jinja2 rendering. Files ending with `.pre` (e.g.
+`.gitignore.pre`, `.env.pre`) are copied **verbatim** (no Jinja2
+processing) with the `.pre` suffix stripped from the destination name.
+Directory names containing `{{  }}` markers are
 also rendered (e.g. `src/{{ name }}/__init__.py.tmpl`).
 
 ---
