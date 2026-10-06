@@ -26,7 +26,7 @@ import colorama
 
 from amctl.colors import ColorLog
 from amctl.license import LICENSES
-from amctl.project import read_project_meta, read_project_scripts
+from amctl.project import detect_project, read_project_scripts
 from amctl.templating import TemplateManager
 from amctl.uv_util import UvOperator
 from amctl.version_resolver import (
@@ -742,11 +742,10 @@ class ManGroup(click.Group):
         return str(pp.parent) if pp else None
 
     def invoke(self, ctx: click.Context) -> Any:
-        meta = read_project_meta()
-        if meta is None:
+        if not read_project_scripts():
             ColorLog.error(
-                "Not inside an amctl project "
-                "(no [tool.amctl.project] found in pyproject.toml or pyproject.toml is missing)."
+                "No [tool.amctl.scripts] found in pyproject.toml "
+                "or pyproject.toml is missing."
             )
             ctx.exit(1)
         return super().invoke(ctx)
@@ -807,15 +806,27 @@ def fix_cmd(check: bool, force: bool, exclude: str | None) -> None:
     customise the list of files to restore.  Use ``--force`` to skip
     the prompt and restore everything (subject to ``--exclude``).
     """
-    meta = read_project_meta()
-    if meta is None:
+    info = detect_project()
+    if info is None:
         ColorLog.error(
-            "Not inside an amctl project. (no [tool.amctl.project] found in pyproject.toml or pyproject.toml is missing)"
+            "Not inside an amctl project. (no [tool.amctl.project] found in "
+            "pyproject.toml, and the project declares no amctl dependency)"
         )
         raise click.Abort()
 
-    project_type = meta.get("project-type", "")
-    project_version = meta.get("version", "")
+    project_type = info.project_type
+    project_version = info.version
+    if not project_type:
+        ColorLog.error(
+            "Cannot tell which template this project came from. "
+            "Add [tool.amctl.project] to pyproject.toml."
+        )
+        raise click.Abort()
+    if info.source == "inferred":
+        ColorLog.warn(
+            f"Template inferred from dependencies: {project_type}. "
+            "Check that it is the right one."
+        )
 
     mgr = TemplateManager()
     templ_cls = mgr.safe_get_templ(project_type)
