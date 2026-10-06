@@ -1,6 +1,6 @@
 [project]
 name = "amctl"
-version = "0.1.4"
+version = "0.1.5"
 description = "CLI for Project Amrita"
 readme = "README.md"
 license = "MIT"
