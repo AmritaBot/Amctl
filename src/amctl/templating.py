@@ -11,7 +11,6 @@ from __future__ import annotations
 import os
 from abc import ABC
 from collections.abc import Callable
-from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any, ClassVar
@@ -220,7 +219,6 @@ class BaseTemplate(ABC):
             "name": name,
             "version": version or "",
             "project_type": self.__template_name__,
-            "created_at": datetime.now(timezone.utc).isoformat(),
         }
         ctx.update(fields)
         return ctx
